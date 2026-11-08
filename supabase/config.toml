@@ -1,0 +1,8 @@
+project_id = "Apps262Lab7"
+
+[auth]
+enabled = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false
