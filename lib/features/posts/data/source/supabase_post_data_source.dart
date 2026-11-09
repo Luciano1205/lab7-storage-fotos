@@ -6,7 +6,7 @@ class SupabasePostDataSource {
   final SupabaseClient _client = Supabase.instance.client;
 
   static const _columns =
-      'id, content, created_at, '
+      'id, content, image_path, created_at, '
       'author:profiles!profile_id(username, full_name, avatar_path), '
       'likes(count), '
       'my_like:likes(profile_id)';
@@ -50,6 +50,7 @@ class SupabasePostDataSource {
       await _client.from('posts').insert({
         'profile_id': _uid,
         'content': content,
+        'image_path': imagePath,
       });
     } on PostgrestException catch (e) {
       throw Exception(e.message);
@@ -90,6 +91,7 @@ class SupabasePostDataSource {
       authorName: author['full_name'] as String,
       likeCount: (row['likes'] as List).first['count'] as int,
       likedByMe: (row['my_like'] as List).isNotEmpty,
+      imagePath: row['image_path'] as String?,
       authorAvatarUrl: avatarPath == null
           ? null
           : _client.storage.from('avatars').getPublicUrl(avatarPath),
